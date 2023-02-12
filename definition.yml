@@ -1,0 +1,144 @@
+method:
+  id: scfates_tree
+  name: scFates Tree
+  tool_id: scFates
+  source: tool
+  platform: python
+  url: https://github.com/LouisFaure/scFates
+  license: MIT
+  authors:
+  - given: Louis
+    family: Faure
+    github: LouisFaure
+wrapper:
+  type: trajectory
+  topology_inference: free
+  trajectory_types:
+  - linear
+  - bifurcation
+  - multifurcation
+  - tree
+  - graph
+  - disconnected_graph
+  input_required: 
+  - counts
+  - start_id
+parameters:
+  - id: tree_method
+    type: character
+    default: ppt
+    values:
+    - ppt
+    - epg
+    description: Generate a principal tree
+  - id: n_top_genes
+    type: integer
+    default: 1500
+    distribution:
+      type: uniform
+      lower: 100
+      upper: 10000
+    description: the number of highly genes
+  - id: palantir_components_num
+    type: integer
+    default: 10
+    distribution:
+      type: uniform
+      lower: 2
+      upper: 100
+    description: the number of PCs used to calculate the Palantir
+  - id: knn_num
+    type: integer
+    default: 30
+    distribution:
+      type: uniform
+      lower: 10
+      upper: 200
+    description: knn number
+  - id: n_eigs
+    type: integer
+    default: 4
+    distribution:
+      type: uniform
+      lower: 2
+      upper: 100
+    description: parameters in palantir.utils.determine_multiscale_space
+  - id: ppt_nodes
+    type: integer
+    default: 200
+    distribution:
+      type: uniform
+      lower: 10
+      upper: 500
+    description: Number of nodes composing the principial tree, use a range of 10 to 100 for
+        ElPiGraph approach and 100 to 2000 for PPT approach.
+
+  - id: ppt_lambda
+    type: integer
+    default: 100
+    distribution:
+      type: uniform
+      lower: 10
+      upper: 500
+    description: Parameter for ElPiGraph, coefficient of ‘stretching’ elasticity.
+
+  - id: ppt_sigma
+    type: numeric
+    default: 0.025
+    distribution:
+      type: uniform
+      lower: 0
+      upper: 1
+    description: Parameter for ElPiGraph, coefficient of ‘stretching’ elasticity. 
+
+  - id: ppt_nsteps
+    type: integer
+    default: 200
+    distribution:
+      type: uniform
+      lower: 10
+      upper: 1000
+    description: Number of steps for the optimisation process of simpleppt. 
+
+  - id: n_map
+    type: integer
+    default: 10
+    distribution:
+      type: uniform
+      lower: 1
+      upper: 100
+    description: number of probabilistic mapping of cells onto the tree to use. 
+
+  - id: epg_lambda
+    type: numeric
+    default: 0.01
+    distribution:
+      type: uniform
+      lower: 0
+      upper: 1
+    description: Parameter for ElPiGraph, coefficient of ‘stretching’ elasticity
+
+  - id: epg_mu
+    type: numeric
+    default: 0.1
+    distribution:
+      type: uniform
+      lower: 0
+      upper: 1
+    description: Parameter for ElPiGraph, coefficient of ‘bending’ elasticity
+
+  - id: epg_initnodes
+    type: integer
+    default: 2
+    distribution:
+      type: uniform
+      lower: 2
+      upper: 50
+    description: numerical 2D matrix, the k-by-m matrix with k m-dimensional positions of the nodes
+        in the initial step
+
+  - id: epg_extend_leaves
+    type: logical
+    default: no
+    description: Parameter for ElPiGraph, calls :func:`elpigraph.ExtendLeaves` after graph learning
+

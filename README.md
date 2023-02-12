@@ -1,16 +1,16 @@
 
 
-# ti_dbcti
-A docker container for dbcti, mainly for cell trajectory inference analysis of single cell RNA-seq data
+# ti_scfates
+A docker container for scFates, mainly for cell trajectory inference analysis of single cell RNA-seq data
 
-## dbcti repository
+## scFates repository
 ```shell
-https://github.com/tianlt/dbcti
+https://github.com/LouisFaure/scFates
 ```
 
 ## pull container
 ```shell
-docker pull renjun0324/ti_dbcti
+docker pull renjun0324/ti_scfates_tree:v0.1.0
 ```
 
 ## quick start
@@ -30,10 +30,10 @@ dataset <- wrap_expression(
   expression = fibroblast_reprogramming_treutlein$expression
 )
                                
-ti_dbcti = create_ti_method_container("renjun0324/ti_dbcti")
+ti_dbcti = create_ti_method_container("renjun0324/ti_scfates_tree")
 model = infer_trajectories(dataset_wrap, 
-			    ti_dbcti(), 
-			    parameters = list(tree_method="epg"), # or ppt
+			    ti_scfates_tree(), 
+			    parameters = list(tree_method="ppt"), # or epg
 			    verbose = TRUE, return_verbose = TRUE, debug = FALSE)
 model$model = map(model$model, add_cell_waypoints)
 metric <- map_dfr(model$model,

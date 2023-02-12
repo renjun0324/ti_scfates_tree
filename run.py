@@ -115,12 +115,12 @@ scf.tl.tree(adata,
 
 # 6. Selecting a root and computing pseudotime
 scf.tl.root(adata, adata.uns['graph']['tips'][0])
-scf.tl.pseudotime(adata, n_jobs=10, n_map=parameters["n_map"], seed=723)
+scf.tl.pseudotime(adata, n_jobs=1, n_map=parameters["n_map"], seed=723)
 tmp = adata.obs['milestones']
 i = np.where(tmp.index==start_id)
 start_index = tmp[i[0][0]]
 scf.tl.root(adata, int(start_index))
-scf.tl.pseudotime(adata, n_jobs=5, n_map=parameters["n_map"], seed=723)
+scf.tl.pseudotime(adata, n_jobs=1, n_map=parameters["n_map"], seed=723)
 
 # 7. plot
 # sc.pl.draw_graph(adata,color="CD34",color_map="RdBu_r",save=".png")

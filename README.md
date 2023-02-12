@@ -3,7 +3,7 @@
 # ti_scfates_tree
 A docker container for scFates, primarily for cell trajectory inference analysis of single-cell RNA-seq data.
 
-The container was edited to follow the main scFates process, retaining some of the parameter settings, especially the tree learning methods, including 'Elastic Principal Graph (epg)' and 'simpleppt (ppt)'. Notably, we did not keep the cellrank functionality in it.
+The container was edited to follow the main scFates process, retaining some of the parameter settings, especially the tree learning methods, including 'Elastic Principal Graph (epg)' and 'simpleppt (ppt)'. Notably, we did not keep cellrank-related functions in it.
 
 
 ## scFates repository and help document

@@ -4,7 +4,7 @@ ARG GITHUB_PAT
 
 RUN pip install scFates
 
-RUN pip install rpy2==3.4.2
+RUN pip install rpy2==3.4.2 
  
 RUN pip install fa2
 

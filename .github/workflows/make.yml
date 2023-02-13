@@ -8,7 +8,7 @@ on:
   schedule:
     - cron: "0 0 * * 1"
 
-name: make
+name: build-docker
 
 jobs:
   build_containers:
@@ -25,11 +25,12 @@ jobs:
           TAG="v$VERSION"
           BRANCH="${GITHUB_REF#refs/heads/}"
           docker build --build-arg GITHUB_PAT=${{ secrets.PAT }} -t dynbuild .
-          docker tag dynbuild $GITHUBREPOSITORY:$BRANCH
+          docker tag dynbuild $GITHUB_REPOSITORY:$BRANCH
           if [[ $BRANCH == "master" ]] ; then
-            docker tag dynbuild $GITHUBREPOSITORY:$TAG
+            docker tag dynbuild $GITHUB_REPOSITORY:$TAG
             docker tag dynbuild $GITHUB_REPOSITORY:latest
           fi
+
       - name: Test
         if: github.repository != 'dynverse/ti_error'
         run: |
@@ -40,5 +41,5 @@ jobs:
           
       - name: Push
         run: |
-          docker login --username ${{ secrets.DOCKERUSERNAME }} --password ${{ secrets.DOCKER_PASSWORD }}
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker push $GITHUB_REPOSITORY

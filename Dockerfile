@@ -14,4 +14,6 @@ COPY definition.yml run.py example.sh /code/
 
 RUN ["chmod", "+x", "/code/run.py"]
 
-ENTRYPOINT ["/code/run.py"] 
+RUN ["chmod", "+x", "/code/example.sh"]
+
+ENTRYPOINT ["/code/run.py"]

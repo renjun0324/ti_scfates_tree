@@ -16,7 +16,7 @@ https://scfates.readthedocs.io/en/latest/
 
 ## pull container
 ```shell
-docker pull renjun0324/ti_scfates_tree:v0.1.0
+docker pull renjun0324/ti_scfates_tree
 ```
 
 ## quick start

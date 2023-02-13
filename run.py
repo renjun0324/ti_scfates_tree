@@ -40,9 +40,9 @@ checkpoints = {}
 #               "n_eigs": 4,
 #               "tree_method":'epg',
 #               "ppt_nodes": 200,
-#               "ppt_lambda": 100,
-#               "ppt_sigma": 0.025,
-#               "ppt_nsteps": 200,
+#               "ppt_lambda": 1,
+#               "ppt_sigma": 0.1,
+#               "ppt_nsteps": 50,
 #               "n_map": 10,
 #               "epg_lambda": 0.01,
 #               "epg_mu": 0.1,
@@ -115,6 +115,8 @@ scf.tl.tree(adata,
 
 # 6. Selecting a root and computing pseudotime
 scf.tl.root(adata, adata.uns['graph']['tips'][0])
+if parameters["tree_method"]=='epg':
+  scf.tl.convert_to_soft(adata, sigma = parameters["ppt_sigma"], lam = parameters["ppt_lambda"])
 scf.tl.pseudotime(adata, n_jobs=1, n_map=parameters["n_map"], seed=723)
 tmp = adata.obs['milestones']
 i = np.where(tmp.index==start_id)

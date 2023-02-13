@@ -63,6 +63,7 @@ parameters:
       lower: 2
       upper: 100
     description: parameters in palantir.utils.determine_multiscale_space
+    
   - id: ppt_nodes
     type: integer
     default: 200
@@ -75,25 +76,25 @@ parameters:
 
   - id: ppt_lambda
     type: integer
-    default: 100
+    default: 1
     distribution:
       type: uniform
-      lower: 10
+      lower: 1
       upper: 500
-    description: Parameter for ElPiGraph, coefficient of ‘stretching’ elasticity.
+    description: Parameter for simpleppt, penalty for the tree length
 
   - id: ppt_sigma
     type: numeric
-    default: 0.025
+    default: 0.1
     distribution:
       type: uniform
       lower: 0
       upper: 1
-    description: Parameter for ElPiGraph, coefficient of ‘stretching’ elasticity. 
+    description: Regularization parameter for simpleppt
 
   - id: ppt_nsteps
     type: integer
-    default: 200
+    default: 50
     distribution:
       type: uniform
       lower: 10

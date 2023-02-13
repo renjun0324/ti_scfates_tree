@@ -129,7 +129,7 @@ scf.tl.pseudotime(adata, n_jobs=1, n_map=parameters["n_map"], seed=723)
 # scf.pl.graph(adata, basis = dim_used_for_output, save=".png")
 # scf.pl.trajectory(adata, basis = dim_used_for_output, save = ".png")
 
-checkpoints["method_aftermethod"] = time.time()
+checkpoints["method_aftermethod"] = time.time() 
 
 #-----------------------------------------------------------------------------
 #

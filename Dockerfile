@@ -10,7 +10,7 @@ RUN pip install fa2
 
 RUN pip install git+https://github.com/dpeerlab/Palantir.git
 
-COPY definition.yml run.py /code/
+COPY definition.yml run.py example.sh /code/
 
 RUN ["chmod", "+x", "/code/run.py"]
 

@@ -3,7 +3,7 @@
 
 import dynclipy
 # task = dynclipy.main(definition_location="/share/data6/tmp/renjun/CellTrekResult/CellTrek/celltrek_pipline/ti_scfates_tree/definition.yml")
-task = dynclipy.main(definition_location="")
+task = dynclipy.main()
 
 #-----------------------------------------------------------------------------
 #

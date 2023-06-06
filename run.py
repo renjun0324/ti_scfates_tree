@@ -102,7 +102,7 @@ sc.pp.neighbors(adata,n_neighbors=parameters["knn_num"], use_rep="X_pca")
 adata.obsm["X_pca2d"]=adata.obsm["X_pca"][:,:2]
 sc.tl.draw_graph(adata,init_pos='X_pca2d')
 # print("33333")
-adata.write("/public/home/renjun/2.h5")
+# adata.write("/public/home/renjun/2.h5")
 
 # 5. Tree learning with SimplePPT
 t = adata.obsm['X_palantir'].shape[0]

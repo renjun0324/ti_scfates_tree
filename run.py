@@ -2,7 +2,8 @@
 
 
 import dynclipy
-task = dynclipy.main(definition_location="/share/data6/tmp/renjun/CellTrekResult/CellTrek/celltrek_pipline/ti_scfates_tree/definition.yml")
+# task = dynclipy.main(definition_location="/share/data6/tmp/renjun/CellTrekResult/CellTrek/celltrek_pipline/ti_scfates_tree/definition.yml")
+task = dynclipy.main(definition_location="")
 
 #-----------------------------------------------------------------------------
 #
@@ -38,12 +39,12 @@ checkpoints = {}
 #               "palantir_components_num": 10,
 #               "knn_num": 30,
 #               "n_eigs": 4,
-#               "tree_method":'epg',
+#               "tree_method":'ppt',
 #               "ppt_nodes": 200,
 #               "ppt_lambda": 1,
 #               "ppt_sigma": 0.1,
 #               "ppt_nsteps": 50,
-#               "n_map": 10,
+#               "n_map": 1,
 #               "epg_lambda": 0.01,
 #               "epg_mu": 0.1,
 #               "epg_initnodes": 2,
@@ -80,10 +81,12 @@ checkpoints["method_afterpreproc"] = time.time()
 adata = anndata.AnnData(counts)
 adata = sc.pp.normalize_per_cell(adata, copy=True)
 palantir.preprocess.log_transform(adata)
+# adata.write("/public/home/renjun/1.h5")
 
 # 2. Perform PCA on highly variable genes
 sc.pp.highly_variable_genes(adata, n_top_genes=parameters['n_top_genes'], flavor='cell_ranger')
 sc.pp.pca(adata)
+# print("11111")
 
 # 3. X_Palantir
 pca_projections = pd.DataFrame(adata.obsm["X_pca"], index=adata.obs_names)
@@ -92,13 +95,20 @@ dm_res = palantir.utils.run_diffusion_maps(pca_projections,
                                            knn=parameters["knn_num"])
 ms_data = palantir.utils.determine_multiscale_space(dm_res,n_eigs=parameters["n_eigs"])
 adata.obsm["X_palantir"]=ms_data.values
+# print("22222")
 
 # 4. Generate embedding from the multiscale diffusion space
 sc.pp.neighbors(adata,n_neighbors=parameters["knn_num"], use_rep="X_pca")
 adata.obsm["X_pca2d"]=adata.obsm["X_pca"][:,:2]
 sc.tl.draw_graph(adata,init_pos='X_pca2d')
+# print("33333")
+adata.write("/public/home/renjun/2.h5")
 
 # 5. Tree learning with SimplePPT
+t = adata.obsm['X_palantir'].shape[0]
+if t<200:
+  parameters["ppt_nodes"] = t-20
+
 scf.tl.tree(adata,
             use_rep='palantir',
             device="cpu",
@@ -112,18 +122,30 @@ scf.tl.tree(adata,
             epg_mu=parameters["epg_mu"],
             epg_initnodes=parameters["epg_initnodes"],
             epg_extend_leaves =parameters["epg_extend_leaves"])
-
+            
 # 6. Selecting a root and computing pseudotime
-scf.tl.root(adata, adata.uns['graph']['tips'][0])
+scf.tl.root(adata, root=adata.uns['graph']['tips'][0])
+
 if parameters["tree_method"]=='epg':
   scf.tl.convert_to_soft(adata, sigma = parameters["ppt_sigma"], lam = parameters["ppt_lambda"])
-scf.tl.pseudotime(adata, n_jobs=1, n_map=parameters["n_map"], seed=723)
+  
+try:
+  scf.tl.pseudotime(adata, n_jobs=1, n_map=parameters["n_map"], seed=723)
+except:
+  print("scf.tl.pseudotime error")
+  
+  
 tmp = adata.obs['milestones']
 i = np.where(tmp.index==start_id)
 start_index = tmp[i[0][0]]
 scf.tl.root(adata, int(start_index))
-scf.tl.pseudotime(adata, n_jobs=1, n_map=parameters["n_map"], seed=723)
 
+try:
+  scf.tl.pseudotime(adata, n_jobs=1, n_map=parameters["n_map"], seed=723)
+except:
+  print("scf.tl.pseudotime error")
+  
+  
 # 7. plot
 # sc.pl.draw_graph(adata,color="CD34",color_map="RdBu_r",save=".png")
 # scf.pl.graph(adata, basis = dim_used_for_output, save=".png")
@@ -149,6 +171,8 @@ milestone_network = pd.DataFrame({
   "length": df["d"].astype(float),
   "directed": True
 })
+ind = np.where(milestone_network['from']!=milestone_network['to'])
+milestone_network = milestone_network.iloc[ind]
 
 # grouping
 grouping = pd.DataFrame({
@@ -156,12 +180,20 @@ grouping = pd.DataFrame({
   "group_id": adata.obs.milestones.astype(str)
 })
 
+# add nan judge
+ind = np.where(grouping['group_id']!="nan")[0]
+grouping = grouping.iloc[ind]
+cell_ids = adata.obs.index[ind]
+dimred = dimred.iloc[ind]
+
+
 # output
-dataset = dynclipy.wrap_data(cell_ids = adata.obs.index)
+dataset = dynclipy.wrap_data(cell_ids = cell_ids)
 dataset.add_cluster_graph(
   grouping = grouping,
   milestone_network = milestone_network
 )
+
 dataset.add_dimred(dimred=dimred)
 dataset.add_timings(timings = checkpoints)
 dataset.write_output(task["output"])

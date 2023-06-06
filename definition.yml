@@ -69,8 +69,8 @@ parameters:
     default: 200
     distribution:
       type: uniform
-      lower: 10
-      upper: 500
+      lower: 100
+      upper: 2000
     description: Number of nodes composing the principial tree, use a range of 10 to 100 for
         ElPiGraph approach and 100 to 2000 for PPT approach.
 
@@ -103,7 +103,7 @@ parameters:
 
   - id: n_map
     type: integer
-    default: 10
+    default: 1
     distribution:
       type: uniform
       lower: 1

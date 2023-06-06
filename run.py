@@ -24,7 +24,7 @@ import scanpy as sc
 import anndata
 import palantir
 import matplotlib.pyplot as plt
-import time
+import time 
 # warnings.filterwarnings("ignore")
 # sc.settings.verbosity = 3
 # sc.settings.logfile = sys.stdout

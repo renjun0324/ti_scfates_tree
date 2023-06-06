@@ -6,6 +6,8 @@ RUN pip install scFates
 
 RUN pip install rpy2==3.4.2 
  
+RUN pip install numpy==1.23.5
+ 
 RUN pip install fa2
 
 RUN pip install git+https://github.com/dpeerlab/Palantir.git

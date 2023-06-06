@@ -36,7 +36,7 @@ dataset <- wrap_expression(
   expression = fibroblast_reprogramming_treutlein$expression
 )
                                
-ti_dbcti = create_ti_method_container("renjun0324/ti_scfates_tree:v0.1.0")
+ti_scfates_tree = create_ti_method_container("renjun0324/ti_scfates_tree:v0.1.0")
 model = infer_trajectories(dataset_wrap, 
 			    ti_scfates_tree(), 
 			    parameters = list(tree_method="ppt"), # or epg
